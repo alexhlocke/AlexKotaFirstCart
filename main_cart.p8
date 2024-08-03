@@ -23,6 +23,27 @@ end
 function _draw()
  _drw()
 end
+
+
+--== random helpers ==----------
+
+--printing
+
+--prints with a border
+function bprint(text,x,y,c,bc)
+ for i=x-1,x+1 do
+  for j=y-1,y+1 do
+   print(text,i,j,bc)
+  end
+ end
+ print(text,x,y,c)
+end
+
+--prints with a centered border
+--(set x=63 to center on screen)
+function bprint_cent(str,x,y,c,bc)
+ bprint(str,x-(#str*2),y,c,bc)
+end
 -->8
 --game/menu
 --== game ==--------------------
