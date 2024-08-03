@@ -58,7 +58,7 @@ function draw_fish_got(fish)
  
  --y+=5*sin(t())
  
- --set_shiny_pal(fish)
+ set_shiny_pal(fish)
  sspr(fish.sprt%16*8,flr(fish.sprt/16)*8
   ,w,h
   ,63-w*scale/2,y-h*scale/2
