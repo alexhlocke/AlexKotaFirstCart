@@ -48,7 +48,7 @@ function cat_tail()
 end
 
 function cat_idle(x,y)
-		spr(0,x,y,2,3)
+		sspr(0,0,13,21,x,y)
 		spr(ct,x-7,y+8,1,2)
 end
 __gfx__
