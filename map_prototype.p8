@@ -21,8 +21,6 @@ function _init()
 end
 
 function _update60()
- camera(cam.x,cam.y)
- 
  if(btn(❎)) then
   speed=3
  else
@@ -41,12 +39,17 @@ function _update60()
  if(btn(➡️))then
   cam.x+=speed
  end
+ 
+ camera(cam.x,cam.y)
 end
 
 
 
 function _draw()
  cls()
+ 
+ --bg
+ sspr(0,32,32,32,cam.x,cam.y,128,128)
  
  map()
  
