@@ -142,7 +142,29 @@ end
  , w, h (sprite width/height)
 ]]--
 
-fishes={} --arcetype table
+fishes={
+} --arcetype table
+
+--add fish to fishes table
+function make_fish(name,size,sprt,w,h)
+ add(fishes,
+  {name=name
+  ,sprt=sprt
+  ,w=w,h=h
+  ,size=size}
+ )
+end
+
+--fully populates fishes table
+--◆this can be optimized for
+--tokens if need be
+function init_fish()
+ --example testing
+ make_fish("freshwater fuckass"
+  ,10,1,2,1)
+ make_fish("jeremy"
+  ,4,3,2,1)
+end
 -->8
 --minigame
 
