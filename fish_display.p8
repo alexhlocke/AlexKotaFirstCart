@@ -45,7 +45,7 @@ function draw_fish_got(fish)
  poke(0x5f34,0x2)
  fillp(░)
  --draw border circle
- local circ_rad=65
+ local circ_rad=73
  circfill(64,64,circ_rad,0 | 0x1800)
  
  --reset fillp / draw mode
@@ -58,7 +58,7 @@ function draw_fish_got(fish)
  
  --y+=5*sin(t())
  
- set_shiny_pal(fish)
+ --set_shiny_pal(fish)
  sspr(fish.sprt%16*8,flr(fish.sprt/16)*8
   ,w,h
   ,63-w*scale/2,y-h*scale/2
