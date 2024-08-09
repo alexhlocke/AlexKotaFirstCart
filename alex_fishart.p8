@@ -89,9 +89,9 @@ end
 
 
 bgx=0
-bgx2=0
-bgx3=0
-bgx4=0
+bgx2=-30
+bgx3=-20
+bgx4=-90
 function draw_clouds()
  --draw static bg
  fillp(▒)
@@ -104,27 +104,29 @@ function draw_clouds()
  if(bgx<-128)bgx=0
  bgx2-=.4
  if(bgx2<-128)bgx2=0
- bgx3-=.8
- if(bgx3<-256)bgx3=0
- bgx4-=.4
- if(bgx4<-256)bgx4=0
+ bgx3-=.3
+ if(bgx3<-128)bgx3=0
+ bgx4-=.2
+ if(bgx4<-128)bgx4=0
  
--- --bg clouds
--- --bottom clouds
--- map(0,16,bgx3,-10,32,6)
--- map(0,16,bgx3+256,-10,32,6)
--- --top clouds
--- map(0,22,bgx4,68,32,10)
--- map(0,22,bgx4+256,68,32,10)
- 
--- --bottom clouds
--- map(0,16,bgx,0,32,6)
--- map(0,16,bgx+256,0,32,6)
--- --top clouds
--- map(0,22,bgx2,48,32,10)
--- map(0,22,bgx2+256,48,32,10)
-
+ --bg clouds
  --single map clouds
+ 
+ --dark bg
+ local c=14
+ pal({[0]=c,c,c,c,c,c,c,c,c,c,c,c,c,c,14,14},0)
+ --palt(14,1)
+ --top
+ map(0,32,bgx3,-10,16,6)
+ map(0,32,bgx3+128,-10,32,6)
+ --bottom
+ map(0,38,bgx4,78,16,10)
+ map(0,38,bgx4+128,78,32,10)
+ --reset pal
+ palt(14,0)
+ pal(0)
+ 
+ --main
  --top
  map(0,32,bgx,0,16,6)
  map(0,32,bgx+128,0,32,6)
