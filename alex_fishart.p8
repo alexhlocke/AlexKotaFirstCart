@@ -25,6 +25,44 @@ function bprint_cent(str,x,y,c,bc)
  bprint(str,x-(#str*2),y,c,bc)
 end
 
+--outlined sprite
+function ospr(c, n, x, y, w, h, flip_x, flip_y)
+	w = w or 1
+	h = h or 1
+	flip_x = flip_x or false
+	flip_y = flip_y or false
+	
+	pal({[0]=c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c}, 0)
+	
+	spr(n, x-1, y, w, h, flip_x, flip_y)
+	spr(n, x+1, y, w, h, flip_x, flip_y)
+	spr(n, x, y-1, w, h, flip_x, flip_y)
+	spr(n, x, y+1, w, h, flip_x, flip_y)
+
+	pal(0)
+	
+	spr(n, x, y, w, h, flip_x, flip_y)
+end
+
+--outlined special sprite
+function osspr(c, sx, sy, sw, sh, dx, dy, dw, dh)
+	w = w or 1
+	h = h or 1
+	flip_x = flip_x or false
+	flip_y = flip_y or false
+	
+	pal({[0]=c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c}, 0)
+	
+	sspr(sx,sy,sw,sh,dx-1,dy,dw,dh)
+	sspr(sx,sy,sw,sh,dx,dy-1,dw,dh)
+	sspr(sx,sy,sw,sh,dx+1,dy,dw,dh)
+	sspr(sx,sy,sw,sh,dx,dy+1,dw,dh)
+	
+	pal(0)
+	
+	sspr(sx,sy,sw,sh,dx,dy,dw,dh)
+end
+
 
 -->8
 --cat sprite drawing
@@ -140,8 +178,8 @@ end
 --testfish
 fish={
  name="mfing trout"
- ,sprt=6
- ,w=2,h=1
+ ,sprt=12
+ ,w=4,h=2
  ,shinycols={
    {4,2}
   ,{9,14}
@@ -172,7 +210,7 @@ function draw_fish_got(fish)
  draw_flourish_lines(63,y+14)
  
 -- set_shiny_pal(fish)
-	sspr(fish.sprt%16*8,flr(fish.sprt/16)*8
+	osspr(1, fish.sprt%16*8,flr(fish.sprt/16)*8
   ,w,h
   ,63-w*scale/2,y-h*scale/2
   ,w*scale,h*scale)
