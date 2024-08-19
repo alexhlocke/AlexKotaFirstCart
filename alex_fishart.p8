@@ -81,6 +81,7 @@ function _update()
 	cat_tail()
 	end
 	
+	update_fx()
 end
 
 function _draw()
@@ -88,6 +89,9 @@ function _draw()
 	
 	--bgmap
 	draw_clouds()
+	
+	--draw water
+	draw_water(110)
 	
 	--sspr(32,32,32,32,0,0,128,128)
 	map(0,0,0,0,128,128)
@@ -99,6 +103,9 @@ function _draw()
 	spr(82,0,97)
 	spr(82,8,97)
 	--print("press ⬅️ to view fish",8)
+	
+	--draw fx
+	draw_fx()
 	
 	draw_light_circ(63,63,40)
 	
@@ -246,6 +253,61 @@ function draw_light_circ(x,y,r)
  for i=x-r,x+r do
  
  end
+end
+-->8
+--== particle system ==--
+
+fxs={} --fx table
+
+--update all fx
+function update_fx()
+ for fx in all(fxs) do
+  --age fxs
+  fx.age+=1
+  
+  --remove timed out fxs
+  if(fx.age>fx.life)del(fxs,fx)
+  
+  --do other udpates
+  if(fx.update!=nil)then
+		 fx.update(fx)
+  end
+ end
+end
+
+--draw all fx
+function draw_fx()
+ for fx in all(fxs) do
+  --if custom draw, do it
+  --otherwise color pixel fx.col
+  if(fx.draw!=nil)then
+   fx.draw(fx)
+  else
+   pset(fx.x,fx.y,fx.col)
+  end
+ end
+end
+
+--add fx to fx table
+function add_fx(x,y,life,col,upd,draw)
+ local fx={
+   age=0
+  ,x=x, y=y
+  ,life=life
+  ,col=col or 15 --default col=white
+  ,upd=upd or nil
+  ,draw=draw or nil
+ }
+ add(fxs,fx)
+ return fx
+end
+
+
+--== water ==--
+
+function draw_water(wl)--wl=water line
+ wl=wl or 80
+ rectfill(0,wl,1000,1000,2)
 end
 __gfx__
 80000008000700000000700000000000b000000b0000000000000056560000000000000000060600000c00c0000000000000000000000000ff00000000000000
