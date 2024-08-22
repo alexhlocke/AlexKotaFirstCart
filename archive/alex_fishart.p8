@@ -193,9 +193,7 @@ fish={
  ,w=2,h=2
  ,scale=2
  ,shinycols={
-   {4,2}
-  ,{9,14}
-  ,{10,8}
+   {11,2}
  }
 }
 
@@ -221,11 +219,17 @@ function draw_fish_got(fish)
  y+=5*sin(t()/2)
  draw_flourish_lines(63,y+14)
  
--- set_shiny_pal(fish)
+ -- shiny (debug)
+ set_shiny_pal(fish)
+
+ --draw fish
 	osspr(0, fish.sprt%16*8,flr(fish.sprt/16)*8
   ,w,h
   ,63-w*scale/2,y-h*scale/2
   ,w*scale,h*scale)
+  
+ --reset pal incase shiny
+ rp()
   
  bprint("holy fucking shit",30,90,15,1)
  bprint("a fucking fish",35,97,14,1)
