@@ -552,7 +552,7 @@ function update_player()
 	
 	--default state
 	if(s.state=="fishing") then
-	 
+	 --
 	else
 	 if(btn(⬅️)or btn(➡️))then
 	  s.state="walking"
@@ -575,14 +575,11 @@ function update_player()
 		--move player
 		if(btn(⬅️))then
 		 s.x-=s.speed
-		 --s.state="walking"
 		 s.direct=true
-		else if(btn(➡️)) then
+		end
+		if(btn(➡️)) then
 		 s.x+=s.speed
-		 --s.state="walking"
 		 s.direct=false
-		else
-			--s.state="idle"
 		end
 		
 		--clamp pos
@@ -609,8 +606,6 @@ function update_player()
  if(btnp(❎)) then
   --interact with shit
  end
-		
-	end
 	
 	
 	--debug
@@ -632,6 +627,56 @@ function draw_player()
  	fillp()
  end
 end
+
+--== cat anim
+
+
+--cat tail sprite--
+function cat_tail()
+	if(player.tail < 4) then
+		player.tail+=1
+	else
+		player.tail=2
+	end
+	return player.tail
+end
+
+--cat feet sprite--
+function walk_spr()
+	if(player.feetsies < 20) then
+		player.feetsies +=2
+	else
+		player.feetsies=18
+	end
+	return player.feetsies
+end
+
+--animation of cat
+function cat_animation(x,y)
+		local s=player
+		
+			if(s.state == "idle"
+			or s.state == "fishing") then
+					spr(s.s0,x,y,2,2,s.direct)
+					if (s.direct) then
+					spr(s.tail,x+14,y+7,1,1,s.direct)
+					else
+					spr(s.tail,x-7,y+7,1,1)
+					end	
+
+			else if (s.state == "walking") then
+					spr(s.feetsies,x,y+8,2,1,s.direct)
+					if(s.direct) then
+					spr(s.tail,x+12,y+2,1,1,s.direct)
+					sspr(0,0,14,9,x,y-1,14,9,s.direct)
+					else
+					spr(s.tail,x-4,y+2,1,1,s.direct)
+					sspr(0,0,14,9,x+3,y-1,14,9,s.direct)
+					end
+			end
+	end
+end
+
 
 
 --== camera ==-------------------
@@ -666,52 +711,6 @@ function update_cam()
 
  --move camera
  camera(cam.x,cam.y)
-end
-
---cat tail sprite--
-function cat_tail()
-	if(player.tail < 4) then
-		player.tail+=1
-	else
-		player.tail=2
-	end
-	return player.tail
-end
-
---cat feet sprite--
-function walk_spr()
-	if(player.feetsies < 20) then
-		player.feetsies +=2
-	else
-		player.feetsies=18
-	end
-	return player.feetsies
-end
-
---=animation of cat=--
-function cat_animation(x,y)
-		local s=player
-		
-			if(s.state == "idle"
-			or s.state == "fishing") then
-					spr(s.s0,x,y,2,2,s.direct)
-					if (s.direct) then
-					spr(s.tail,x+14,y+7,1,1,s.direct)
-					else
-					spr(s.tail,x-7,y+7,1,1)
-					end	
-
-			else if (s.state == "walking") then
-					spr(s.feetsies,x,y+8,2,1,s.direct)
-					if(s.direct) then
-					spr(s.tail,x+12,y+2,1,1,s.direct)
-					sspr(0,0,14,9,x,y-1,14,9,s.direct)
-					else
-					spr(s.tail,x-4,y+2,1,1,s.direct)
-					sspr(0,0,14,9,x+3,y-1,14,9,s.direct)
-					end
-			end
-	end
 end
 
 
