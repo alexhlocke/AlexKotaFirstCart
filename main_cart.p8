@@ -113,7 +113,20 @@ end
 
 --== debug stuff ==-------------
 
+--debug
+debug={}
 
+debug[1]="cpu: "..flr(stat(1)*100).."%"
+debug[2]="mem: "..flr(stat(0)/2048).."%"
+
+show_debug=true
+function print_debug()
+ for i=1,10 do
+  if(debug[i]!=nil) then
+   bprint(debug[i],cam.x+1,cam.y+1+(i-1)*6,8,0)
+  end
+ end
+end
 -->8
 --game / menu
 
@@ -137,6 +150,9 @@ function update_game()
  
  --update cam
  update_cam()
+ 
+ --update fx
+ update_fx()
 end
 
 
@@ -146,6 +162,9 @@ function draw_game()
  --drawbg
  --clouds
  draw_clouds()
+ 
+ --draw water
+ draw_water(110) --water y
  
  --draw map
  map(0,0,0,0,128,128)
@@ -158,13 +177,18 @@ function draw_game()
   --draw fish
  
  
- --draw foreground details
-
+ --== draw foreground details
+ draw_fx()
  		
  
  --draw main menu
  if(show_menu)draw_main_menu()
 
+
+ --== debug stuff
+ 
+ if(show_debug)print_debug()
+ 
  --fish display [debug]
  --display_fish=rnd(fishes)
  if(btn(❎))then
@@ -403,7 +427,7 @@ frame=0
 walkframe=0
 
 player={
-  x=63, y=81
+  x=400, y=81
  ,default_y=81
  ,speed=1
  ,direct=false
@@ -481,6 +505,10 @@ function update_player()
  end
 		
 	end
+	
+	
+	--debug
+	debug[3]="px: "..player.x.." - py: "..player.y
 end
 
 
@@ -490,10 +518,12 @@ function draw_player()
 		cat_animation(s.x,s.y)
  
  --debug draw hbox
--- 	fillp(▒)
--- 	local hb=s.hbox
--- 	rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
--- 	fillp()
+ if(show_debug)then
+ 	fillp(▒)
+ 	local hb=s.hbox
+ 	rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
+ 	fillp()
+ end
  
 		map(0,0,0,0,128,128)
 end
@@ -625,6 +655,90 @@ function draw_clouds()
  --bottom
  map(cmx,cmy+6,cam.x+bgx2,cam.y+68,16,10)
  map(cmx,cmy+6,cam.x+bgx2+128,cam.y+68,32,10)
+end
+
+--== fx/particles ==-------------
+
+--== particle system ==--
+
+fxs={} --fx table
+
+--update all fx
+function update_fx()
+ for fx in all(fxs) do
+  --age fxs
+  fx.age+=1
+  
+  --remove timed out fxs
+  if(fx.age>fx.life)del(fxs,fx)
+  
+  --do other udpates
+  if(fx.upd!=nil)then
+		 fx.upd(fx)
+  end
+ end
+end
+
+--draw all fx
+function draw_fx()
+ for fx in all(fxs) do
+  --if custom draw, do it
+  --otherwise color pixel fx.col
+  if(fx.draw!=nil)then
+   fx.draw(fx)
+  else
+   pset(fx.x,fx.y,fx.col)
+  end
+ end
+end
+
+--add fx to fx table
+---x,y,life,col,upd,drw
+function add_fx(x,y,life,col,upd,draw)
+ local fx={
+   age=0
+  ,x=x, y=y
+  ,life=life
+  ,col=col or 15 --default col=white
+  ,upd=upd or nil
+  ,draw=draw or nil
+ }
+ add(fxs,fx)
+ return fx
+end
+
+
+--== water ==--
+
+--draw water
+function draw_water(wl)--wl=water line
+ wl=wl or 80
+ rectfill(0,wl,1000,1000,2)
+ 
+ --draws top of water at x pnt
+ local xpnt=424
+ draw_waterline(wl,xpnt)
+ draw_waterline(wl,xpnt)
+ draw_waterline(wl,xpnt)
+ draw_waterline(wl,xpnt)
+ draw_waterline(wl,xpnt)
+end
+
+--waterline
+function draw_waterline(wl,x)
+ add_fx(
+   rnd(128)+x
+  ,wl
+  ,rnd(30)+60
+  ,13
+  ,function(s)
+    if(s.age/s.life>.15)s.col=14
+    if(s.age/s.life>.25)s.col=15
+    if(s.age/s.life>.75)s.col=14
+    if(s.age/s.life>.85)s.col=13
+   end
+  ,nil
+ )
 end
 __gfx__
 00770000007700000000770000007700000007700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
