@@ -107,7 +107,7 @@ end
 
 --reset color palette
 function reset_pal()
- poke( 0x5f2e, 1 ) --endable hidden colors
+ --poke( 0x5f2e, 1 ) --endable hidden colors
  custom_palette = {[0]=0,1,140,12,131,3,139,130,136,14,142,143,15,13,6,7}
  pal( custom_palette, 1 )
 end
@@ -118,7 +118,7 @@ end
 --debug
 debug={}
 
-show_debug=true
+show_debug=false
 function print_debug()
  for i=1,10 do
   if(debug[i]!=nil) then
@@ -148,6 +148,7 @@ function init_game()
 end
 
 
+--== update ==-----------------
 function update_game() 
  --update/move player
  update_player()
@@ -166,6 +167,7 @@ function update_game()
 end
 
 
+--== draw ==--------------------
 function draw_game()
  cls(2)
  
@@ -179,7 +181,8 @@ function draw_game()
  --draw map
  map()
  --water to block map (ghetto)
- rectfill(384,256,700,700,2) 
+ rectfill(384,256,700,7000,2) 
+ rectfill(384,256,700,7000,2) 
 
  --draw player
  draw_player()
@@ -200,22 +203,20 @@ function draw_game()
 
  --== debug stuff
  
- if(show_debug)print_debug()
- 
  --fish display [debug]
  --display_fish=rnd(fishes)
--- if(btn(❎))then
---  display_fish=fishes[3]
---  draw_fish_got(display_fish)
--- else
---  display_fish=rnd(fishes)
--- end
+ if(btn(⬆️))then
+  display_fish=fishes[6]
+  draw_fish_got(display_fish)
+ else
+  display_fish=rnd(fishes)
+ end
+ 
+ if(show_debug)print_debug()
 end 
 
 
 --== main menu ==---------------
-
-
 show_menu=false
 
 --displays menu overlay on top
@@ -276,8 +277,8 @@ function init_fish()
   ,138,1,1,2)
  make_fish("fish 4"
   ,152,1,1,2)
- make_fish("fish 5"
-  ,153,1,1,2)
+ make_fish("pINKTAIL"
+  ,153,1,1,2,{{8,2},{9,3},{2,8},{3,9}})
  make_fish("sHRIMP"
   ,154,1,1,1)
  make_fish("jUMBO sHRIMP"
@@ -358,14 +359,15 @@ function draw_fish_got(fish)
   ,w*scale,h*scale)
 
  --shiny (debug)
- set_shiny_pal(fish)
+ --set_shiny_pal(fish)
 	
  sspr(fish.sprt%16*8,flr(fish.sprt/16)*8
   ,w,h
   ,cam.x+63-w*scale/2,cam.y+y-h*scale/2
   ,w*scale,h*scale)
-  
- rp()
+ 
+ --complete palette refresh
+ p() rp() 
   
  bprint("holy fucking shit",cam.x+30,cam.y+90,15,1)
  bprint("a fucking fish",cam.x+35,cam.y+97,14,1)
@@ -392,6 +394,15 @@ function set_shiny_pal(fish)
   pal(scols[i][1],scols[i][2])
  end
 end
+
+function reset_shiny_pal(fish)
+	if(fish.shinycols==nil)return
+ scols=fish.shinycols
+ for i=1,#scols do
+  pal(scols[i][2],scols[i][1])
+ end
+end
+
 
 
 -->8
