@@ -716,12 +716,28 @@ function update_cam()
   cam.x=384
  end
  
- --scrolling town
+ --scrolling town/interiors
+ --town/shop
  if(px>128 and px<384)then
   cam.x=px-59
   if(cam.x<128)cam.x=128
   if(cam.x>256)cam.x=256
  end
+ 
+ --aquarium
+ if(px>512 and px<768)then
+  cam.x=px-59
+  if(cam.x<512)cam.x=512
+  if(cam.x>640)cam.x=640
+ end
+ 
+ --home
+ if(px>768 and px<1024)then
+  cam.x=px-59
+  if(cam.x<768)cam.x=768
+  if(cam.x>896)cam.x=896
+ end
+ 
 
  --move camera
  camera(cam.x,cam.y)
