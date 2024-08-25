@@ -677,6 +677,17 @@ function draw_player()
  end
 end
 
+
+--player teleportation
+function tp(x,y)
+ --default vals
+ xp=x or 400
+ yp=y or player.default_y
+ --move player
+ player.x=xp
+ player.y=yp
+end
+
 --== cat anim
 
 
@@ -760,7 +771,7 @@ function update_cam()
  end
  
  --aquarium
- if(px>512 and px<768)then
+ if(px>512 and px<=768)then
   cam.x=px-59
   if(cam.x<512)cam.x=512
   if(cam.x>640)cam.x=640
@@ -954,15 +965,15 @@ function show_❎(x,y)
 end
 
 function init_interactables()
- add_interactable(298,55,318,100
+ add_interactable(288,55,328,100
   ,"eNTER hOME"
   ,function() sfx(0) end
   ,"home door")
- add_interactable(194,55,214,100
+ add_interactable(184,55,224,100
   ,"eNTER sHOP"
   ,function() sfx(0) end
   ,"shop door")
- add_interactable(58,55,78,100
+ add_interactable(38,55,88,100
   ,"eNTER aQUARIUM"
   ,function() sfx(0) end
   ,"aquarium door")
