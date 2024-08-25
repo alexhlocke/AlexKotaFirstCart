@@ -939,9 +939,18 @@ hbx1,hby1,hbx2,hby2
 end
 
 function show_prompt(i) --i=interactabble
+ --main prompt
+ --print prompt at top of hbox
  xp=i.hbox.x1+((i.hbox.x2-i.hbox.x1)/2)
  yp=i.hbox.y1
  bprint_cent(i.prompt,xp,yp,15,0)
+
+ show_❎(xp-2,yp+9)
+end
+
+function show_❎(x,y)
+ bprint_cent("❎",x,y,0,0)
+ bprint_cent("❎",x,y-sin(t()),15,0)
 end
 
 function init_interactables()
