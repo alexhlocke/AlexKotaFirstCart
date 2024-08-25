@@ -945,7 +945,7 @@ function show_prompt(i) --i=interactabble
  yp=i.hbox.y1
  bprint_cent(i.prompt,xp,yp,15,0)
 
- show_❎(xp-2,yp+9)
+ show_❎(xp-1,yp+9)
 end
 
 function show_❎(x,y)
@@ -954,14 +954,22 @@ function show_❎(x,y)
 end
 
 function init_interactables()
- add_interactable(360,60,380,100
-  ,"hOLY CRAP lOIS"
-  ,function() sfx(0) end
-  ,"test interactable")
  add_interactable(298,55,318,100
   ,"eNTER hOME"
   ,function() sfx(0) end
   ,"home door")
+ add_interactable(194,55,214,100
+  ,"eNTER sHOP"
+  ,function() sfx(0) end
+  ,"shop door")
+ add_interactable(58,55,78,100
+  ,"eNTER aQUARIUM"
+  ,function() sfx(0) end
+  ,"aquarium door")
+ add_interactable(407,70,460,100
+  ,"sTART fISHING"
+  ,function() sfx(0) end
+  ,"fishing zone")
 end
 
 
