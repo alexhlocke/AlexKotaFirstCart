@@ -128,7 +128,7 @@ debug={}
 
 show_debug=true
 function print_debug()
- for i=1,10 do
+ for i=1,20 do
   if(debug[i]!=nil) then
    bprint(debug[i],cam.x+1,cam.y+1+(i-1)*6,8,0)
   end
@@ -207,6 +207,14 @@ function draw_game()
  
  --== draw foreground details
  draw_fx()
+ 
+ --draw intreactable prompts
+ for i in all(interactables) do
+  if(col(player,i)) then
+   --debug[6]="hit something"
+   show_prompt(i)
+  end
+ end
  		
  
  --draw main menu
@@ -628,10 +636,20 @@ function update_player()
  
  --update hbox
  local hb = s.hbox
- hb.x1=s.x-3
- hb.x2=s.x+18
+ hb.x1=s.x
+ hb.x2=s.x+15
  hb.y1=s.y-3
  hb.y2=s.y+18
+ 
+ 
+ --collisions
+   --debug[6]="hit nothing"
+ for i in all(interactables) do
+  if(col(player,i)) then
+   --debug[6]="hit something"
+   show_prompt(i)
+  end
+ end
  
  --press ❎ to interact
  if(btnp(❎)) then
@@ -915,19 +933,50 @@ hbx1,hby1,hbx2,hby2
  add(interactables,{
   hbox={x1=hbx1,y1=hby1,x2=hbx2,y2=hby2}
   ,prompt=prompt
-  ,on_interact=on_interact
+  ,on_click=on_interact
   ,id=id or "unindentified"
  })
 end
 
+function show_prompt(i) --i=interactabble
+ xp=i.hbox.x1+((i.hbox.x2-i.hbox.x1)/2)
+ yp=i.hbox.y1
+ bprint_cent(i.prompt,xp,yp,15,0)
+end
+
 function init_interactables()
- add_interactable(10,20,40,50
+ add_interactable(360,60,380,100
   ,"hOLY CRAP lOIS"
   ,function() sfx(0) end
   ,"test interactable")
- add_interactable(100,10,110,80
-  ,"uNNAMED INTERACTABLE YUH"
-  ,function() sfx(0) end)
+ add_interactable(298,55,318,100
+  ,"eNTER hOME"
+  ,function() sfx(0) end
+  ,"home door")
+end
+
+
+--== collision ==--
+
+
+function col(a,b)
+ --check if hb
+ --if(a.hb==nil)debug[8]=a.id..":invalid hb"
+ --if(b.hb==nil)debug[8]=b.id..":invalid hb"
+ ahb=a.hbox
+ bhb=b.hbox
+
+ if(
+  ((ahb.x1>=bhb.x1 and ahb.x1<=bhb.x2)
+  or (ahb.x2>=bhb.x1 and ahb.x2<=bhb.x2))
+ and 
+  ((ahb.y1>=bhb.y1 and ahb.y1<=bhb.y2)
+  or (ahb.y2>=bhb.y1 and ahb.y2<=bhb.y2))
+  ) then 
+   return true
+ end
+
+ return false
 end
 __gfx__
 0077000000770000000077000000770000000770000000000000777777770000eeeeeeee000000000eeeeeeeeeeeeee0066c6500005c500089230000bbbbbbbb
