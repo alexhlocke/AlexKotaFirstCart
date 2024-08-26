@@ -496,7 +496,7 @@ function draw_hook()
  end
  
  --draw fishing line
- line(s.x+5,s.y,player.x+9,player.y+10,0)
+ line(s.x+5,s.y,player.x+15,player.y+3,0)
 end
 
 
@@ -588,7 +588,7 @@ frame=0
 walkframe=0
 
 player={
-  x=250
+  x=400
  ,y=81
  ,default_y=81
  ,speed=1
@@ -771,28 +771,37 @@ end
 
 --animation of cat
 function cat_animation(x,y)
-		local s=player
-		
-			if(s.state == "idle"
-			or s.state == "fishing"
-			or s.state == "frozen") then
-					spr(s.s0,x,y,2,2,s.direct)
-					if (s.direct) then
-					spr(s.tail,x+14,y+7,1,1,s.direct)
-					else
-					spr(s.tail,x-7,y+7,1,1)
-					end	
+	local s=player
+	local sstate=s.state
+	
+	if(sstate == "idle"
+	or sstate == "fishing"
+	or sstate == "frozen") then
+	 --turn player if fishing
+	 if(sstate=="fishing")s.direct=false
+		spr(s.s0,x,y,2,2,s.direct)
+		if (s.direct) then
+		spr(s.tail,x+14,y+7,1,1,s.direct)
+		else
+		spr(s.tail,x-7,y+7,1,1)
+		end	
 
-			else if (s.state == "walking") then
-					spr(s.feetsies,x,y+8,2,1,s.direct)
-					if(s.direct) then
-					spr(s.tail,x+12,y+2,1,1,s.direct)
-					sspr(0,0,14,9,x,y-1,14,9,s.direct)
-					else
-					spr(s.tail,x-4,y+2,1,1,s.direct)
-					sspr(0,0,14,9,x+3,y-1,14,9,s.direct)
-					end
-			end
+	else if (sstate == "walking") then
+		spr(s.feetsies,x,y+8,2,1,s.direct)
+		if(s.direct) then
+		spr(s.tail,x+12,y+2,1,1,s.direct)
+		sspr(0,0,14,9,x,y-1,14,9,s.direct)
+		else
+		spr(s.tail,x-4,y+2,1,1,s.direct)
+		sspr(0,0,14,9,x+3,y-1,14,9,s.direct)
+		end
+	end
+	end
+	
+	--draw fishing rod if fishing
+	if(sstate=="fishing")then
+	 ospr(7,37,s.x+9,s.y+4)
+	 debug[8]="draw rod"
 	end
 end
 
@@ -806,7 +815,13 @@ function update_cam()
  --if minigame
  if(player.state=="fishing")then
   cam.x=384
-  cam.y=hook.y-40
+  
+  if(cam.y < hook.y-42)then
+   cam.y+=2
+  else
+   cam.y=hook.y-40
+  end
+  
   camera(cam.x,cam.y)
   return
  end
