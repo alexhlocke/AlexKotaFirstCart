@@ -280,8 +280,6 @@ end
 -->8
 --fish
 
---★ todo: shinies
-
 --[[ fish structure
  name, scale, sprt (sprite #)
  , w, h (sprite width/height)
@@ -452,6 +450,7 @@ end
 
 --== hook / tables ==------------------
 
+
 minigame_state="inactive"
 --,inactive,starting,sinking,...
 do_minigame=false
@@ -567,10 +566,9 @@ end
  these can change depending on
  special rooms / states
 --]]
---main_xl_limit=20
---main_xr_limit=407
-main_xl_limit=-1000
-main_xr_limit=2000
+
+main_xl_limit=0
+main_xr_limit=408
 --interior y player val
 int_y=230
 default_y=81
@@ -714,7 +712,18 @@ function tp(x,y,camx,camy)
  cam.y=camy
 end
 
---== cat anim
+
+function set_player_limits(x1,x2)
+ --default x limits
+ x1=x1 or main_xl_limit
+ x2=x2 or main_xr_limit
+ --set player lims
+ player.xl_limit=x1
+ player.xr_limit=x2
+end
+
+
+--== cat animation ==-----------
 
 
 --cat tail sprite--
@@ -1007,18 +1016,21 @@ function init_interactables()
   ,"eNTER hOME"
   ,function() 
     tp(528,int_y-20,512,128)
+    set_player_limits(513,752)
    end
   ,"home door")
  add_interactable(184,55,224,100
   ,"eNTER sHOP"
   ,function()
     tp(144,int_y-20,128,128)
+    set_player_limits(129,368)
    end
   ,"shop door")
  add_interactable(38,55,88,100
   ,"eNTER aQUARIUM"
   ,function() 
     tp(784,int_y-20,768,128)
+    set_player_limits(769,1008)
    end
   ,"aquarium door")
   
@@ -1027,18 +1039,21 @@ function init_interactables()
   ,"eXIT sHOP"
   ,function()
     tp(198,default_y,128,0)
+    set_player_limits()
    end
   ,"shop exit")
  add_interactable(512,203,552,256
   ,"eXIT hOME"
   ,function()
     tp(302,default_y,128,0)
+    set_player_limits()
    end
   ,"home exit")
  add_interactable(768,203,808,256
   ,"eXIT aQUARIUM"
   ,function()
     tp(61,default_y,0,0)
+    set_player_limits()
    end
   ,"aquarium exit")
   
