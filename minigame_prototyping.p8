@@ -182,7 +182,7 @@ function draw_mg_player()
  local y=mg_player.y
  circfill(x,y,6,1)
  circ(x,y,6,3)
- bprint_cent("⬅️     ➡️",x-3,y+2,15,0)
+ if(show_hints_f>0)bprint_cent("⬅️     ➡️",x-3,y+2,15,0)
 end
 
 
@@ -248,9 +248,14 @@ function init_reeling_mg()
  reel_meter=reel_meter_max
  mg_player.x=63 
  mg_player.y=cam.y
+ 
+ show_hints_f=90
 end
 
 function update_reeling_mg()
+ --update hint frame
+ if(show_hints_f>0)show_hints_f-=1
+
  --update reel meter
  reel_meter-=reel_rate
  if(btn(❎))reel_meter-=reel_rate
@@ -270,6 +275,8 @@ function draw_reeling_mg()
  draw_mg_player()
  draw_mg_fish()
  draw_reel_meter()
+ 
+ if(show_hints_f>0)bprint_cent("❎ TO REEL",62,cam.y+120,15,0)
 end
 
 function draw_reel_meter()
