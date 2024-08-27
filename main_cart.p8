@@ -331,8 +331,10 @@ function init_fish()
   ,154,1,1,3)
  make_fish("fish 7"
   ,155,1,1,2)
- make_fish("fish 8"
-  ,136,1,1,2)
+ make_fish("pUFFERFISH"
+  ,151,1,1,2)
+ make_fish("sEAPONY"
+  ,134,1,1,2)
   
  --1x2 fish
  make_fish("aXOLITTLE"
@@ -351,6 +353,10 @@ function init_fish()
  --xl fish
  make_fish("sWORDFISH"
   ,140,4,2,3,{{3,9},{2,8},{1,7}})
+ make_fish("hAMMERHEAD"
+  ,164,4,2,3,{{3,9},{2,8},{1,7}})
+ make_fish("gIANT sQUID"
+  ,160,4,2,3,{{3,9},{2,8},{1,7}})
  
  
 -- make_fish("rainbow trout"
