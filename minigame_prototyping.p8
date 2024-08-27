@@ -277,6 +277,83 @@ function draw_reel_meter()
  rect(5,bottom_y-reel_meter_max,9,bottom_y,5)
  rectfill(6,bottom_y-reel_meter,8,bottom_y,6)
 end
+-->8
+--spawners
+
+--spawning
+spawners={}
+function make_spawner(id,make_func,make_func_params,rate,range)
+ local s={
+  id=id,init_rate=rate,rate=rate
+  ,range=range or 0
+  ,make_func=make_func or function()print("spawner err no make_func")end
+  ,make_func_params=make_func_params
+  ,f=1
+  ,update=function(s)
+   s.f+=1
+   if(s.f>s.rate) then
+    s.make_func(s.make_func_params)
+    s.f=1
+    s.rate=s.init_rate+rnd(s.range)-(s.range/2)
+   end
+  end
+ }
+ add(spawners,s)
+end
+
+function update_spawners()
+ for s in all(spawners) do 
+  s.update(s)
+ end
+end 
+-->8
+--== particle system ==--
+
+fxs={} --fx table
+
+--update all fx
+function update_fx()
+ for fx in all(fxs) do
+  --age fxs
+  fx.age+=1
+  
+  --remove timed out fxs
+  if(fx.age>fx.life)del(fxs,fx)
+  
+  --do other udpates
+  if(fx.upd!=nil)then
+		 fx.upd(fx)
+  end
+ end
+end
+
+--draw all fx
+function draw_fx()
+ for fx in all(fxs) do
+  --if custom draw, do it
+  --otherwise color pixel fx.col
+  if(fx.draw!=nil)then
+   fx.draw(fx)
+  else
+   pset(fx.x,fx.y,fx.col)
+  end
+ end
+end
+
+--add fx to fx table
+---x,y,life,col,upd,drw
+function add_fx(x,y,life,col,upd,draw)
+ local fx={
+   age=0
+  ,x=x, y=y
+  ,life=life
+  ,col=col or 15 --default col=white
+  ,upd=upd or nil
+  ,draw=draw or nil
+ }
+ add(fxs,fx)
+ return fx
+end
 __gfx__
 0077000000770000000077000000770000000770000000000000777777770000eeeeeeee000000000eeeeeeeeeeeeee0066065000050500089230000bbbbbbbb
 07cb700007bc70000007cc700007cc7000007cc7000000000007888888887000ecb5bc5d09f0f9000e333333333333d0005550000005000089235660b452377b
