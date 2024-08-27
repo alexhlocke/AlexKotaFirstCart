@@ -315,15 +315,15 @@ function init_fish()
  --1x1 fish
  make_fish("mOSS sLUG"
   ,135,1,1,2,{{6,3},{5,2},{4,1}})
- make_fish("fish 1"
+ make_fish("sTROMATEIDAE"
   ,136,1,1,2)
- make_fish("fish 2"
+ make_fish("dARWIN fISH
   ,137,1,1,2)
- make_fish("fish 3"
+ make_fish("oMEGA fISH"
   ,138,1,1,2)
- make_fish("fish ?"
+ make_fish("gREENBACK"
   ,139,1,1,2)
- make_fish("fish 4"
+ make_fish("sHAD"
   ,152,1,1,2)
  make_fish("pINKTAIL"
   ,153,1,1,2,{{8,2},{9,3},{2,8},{3,9}})
@@ -331,7 +331,7 @@ function init_fish()
   ,154,1,1,1)
  make_fish("jUMBO sHRIMP"
   ,154,1,1,3)
- make_fish("fish 7"
+ make_fish("pENNON"
   ,155,1,1,2)
  make_fish("pUFFERFISH"
   ,151,1,1,2)
@@ -341,24 +341,24 @@ function init_fish()
  --1x2 fish
  make_fish("aXOLITTLE"
   ,168,2,1,2)
- make_fish("fish 10"
+ make_fish("tROUT"
   ,184,2,1,2)
   
  --2x2 fish
- make_fish("fish 11"
+ make_fish("sOLFISH"
   ,170,2,2,2)
- make_fish("fish 12"
+ make_fish("sPADE"
   ,172,2,2,2)
- make_fish("aMGLERFISH"
+ make_fish("aMGLER"
   ,174,2,2,2,{{6,15},{5,15},{4,15},{1,14},{7,13},{11,0},{12,15}})
  
  --xl fish
  make_fish("sWORDFISH"
   ,140,4,2,3,{{3,9},{2,8},{1,7}})
  make_fish("hAMMERHEAD"
-  ,164,4,2,3,{{3,9},{2,8},{1,7}})
+  ,164,4,2,3,{})
  make_fish("gIANT sQUID"
-  ,160,4,2,3,{{3,9},{2,8},{1,7}})
+  ,160,4,2,3,{})
  
  
 -- make_fish("rainbow trout"
