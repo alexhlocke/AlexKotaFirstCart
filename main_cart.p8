@@ -328,9 +328,9 @@ function init_fish()
  make_fish("pINKTAIL"
   ,153,1,1,2,{{8,2},{9,3},{2,8},{3,9}})
  make_fish("sHRIMP"
-  ,154,1,1,1)
+  ,154,1,1,1,{{12,3},{11,2},{10,4}})
  make_fish("jUMBO sHRIMP"
-  ,154,1,1,3)
+  ,154,1,1,3,{{12,3},{11,2},{10,4}})
  make_fish("pENNON"
   ,155,1,1,2)
  make_fish("pUFFERFISH"
@@ -396,7 +396,7 @@ end
 
 function draw_fish_got(fish)
  --debugging shiny
- fish=find_fish(139)
+ fish=find_fish("jUMBO sHRIMP")
  fish.shiny=true
  
  --get fish h and w
