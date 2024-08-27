@@ -317,7 +317,7 @@ function init_fish()
   ,135,1,1,2,{{6,3},{5,2},{4,1}})
  make_fish("sTROMATEIDAE"
   ,136,1,1,2)
- make_fish("dARWIN fISH
+ make_fish("dARWIN fISH"
   ,137,1,1,2)
  make_fish("oMEGA fISH"
   ,138,1,1,2)
