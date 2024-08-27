@@ -321,6 +321,8 @@ function init_fish()
   ,137,1,1,2)
  make_fish("fish 3"
   ,138,1,1,2)
+ make_fish("fish ?"
+  ,139,1,1,2)
  make_fish("fish 4"
   ,152,1,1,2)
  make_fish("pINKTAIL"
@@ -379,18 +381,28 @@ function init_fish()
 --  ,11,4,2,1)
 end
 
+function find_fish(search_term)
+ for f in all(fishes) do
+  if(f.sprt==search_term
+  or f.name==search_term)then
+   return f
+  end
+ end
+end
+
 
 --== fish display ==------------
 
 
 function draw_fish_got(fish)
+ --debugging shiny
+ fish=find_fish(139)
+ fish.shiny=true
+ 
  --get fish h and w
  local h=fish.h*8
  local w=fish.w*8
  local scale=fish.scale
- 
- --debugging shiny
- fish.shiny=true
  
  --upd scale
  --scale=fish.scale+0.5*sin(t()/4)
