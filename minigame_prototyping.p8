@@ -47,7 +47,10 @@ function _draw()
  
  draw_reeling_mg()
  
- print_debug()
+ if(show_debug)then
+	 print_debug()
+	 draw_hboxs()
+ end
 end
 
 
@@ -135,7 +138,7 @@ end
 --debug
 debug={}
 
-show_debug=false
+show_debug=true
 function print_debug()
  for i=1,20 do
   if(debug[i]!=nil) then
@@ -151,6 +154,11 @@ function draw_hboxs()
   rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
   fillp()
  end
+ 
+ local hb=mg_fish.hbox
+ fillp(▒)
+ rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
+ fillp()
 end
 -->8
 --== reeling ==-----------------
@@ -194,6 +202,9 @@ mg_fish={
  ,dx=0,dy=0
  ,scale=2
  ,flp=false
+ ,hbox={
+   
+  }
 }
 xreel_force=0.04
 yreel_force=0.02
@@ -228,6 +239,13 @@ function update_mg_fish()
  --move
  s.x+=s.dx
  s.y+=s.dy
+ 
+ --update hbox
+ local hb = s.hbox
+ hb.x1=s.x-7
+ hb.x2=s.x+7
+ hb.y1=s.y-1
+ hb.y2=s.y+1
 end
 
 --draw
