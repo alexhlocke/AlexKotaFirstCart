@@ -256,6 +256,52 @@ function draw_mg_fish()
 end
 
 
+--== enemies ==--
+
+enemies={}
+
+function make_shark()
+ local enemy={
+  x=-30
+  ,y=cam.y+20+rnd(88)
+  ,dx=2,dy=0
+  ,sprt=140,w=4,h=2
+  ,flp=true
+  ,id="shark"
+ }
+ 
+ if(rnd(2)<1)then
+  enemy.x=158
+  enemy.dx*=-1
+  enemy.flp=false
+ end
+ 
+ add(enemies,enemy)
+end
+
+
+--updates/draws
+
+function update_enemies()
+ for e in all(enemies) do
+  e.x+=e.dx
+  e.y+=e.dy
+ end
+end
+
+
+function draw_enemies()
+ for e in all(enemies) do
+  ospr(8,e.sprt,e.x,e.y,e.w,e.h,e.flp)
+  if(e.id=="shark")then
+   local c=1
+   pal({[0]=c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c}, 0)
+   spr(e.sprt,e.x,e.y,e.w,e.h,e.flp)
+   rp()
+  end
+ end
+end
+
 --== main minigame upd ==--------
 
 reel_meter_max=40
@@ -271,6 +317,11 @@ function init_reeling_mg()
 end
 
 function update_reeling_mg()
+ --debug
+ if(btnp(🅾️))then
+  make_shark()
+ end
+
  --update hint frame
  if(show_hints_f>0)show_hints_f-=1
 
@@ -286,12 +337,16 @@ function update_reeling_mg()
 
  update_mg_player()
  update_mg_fish()
+ update_enemies()
 end
 
 function draw_reeling_mg()
  line(mg_player.x,mg_player.y,mg_fish.x,mg_fish.y,15)
+ 
  draw_mg_player()
  draw_mg_fish()
+ draw_enemies()
+ 
  draw_reel_meter()
  
  if(show_hints_f>0)bprint_cent("❎ TO REEL",62,cam.y+120,15,0)
