@@ -226,7 +226,7 @@ end
 
 --== fish ==--
 
-grav=1
+grav=1.33
 mg_fish={
  x=63,y=63
  ,dx=0,dy=0
@@ -258,6 +258,7 @@ function update_mg_fish()
   -- adjust dx and dy to move mg_fish towards mg_player
   mg_fish.dx=diff_x * xreel_force -- adjust the multiplier for speed
   mg_fish.dy=diff_y * yreel_force
+  if(mg_fish.dy<0 and mg_fish.dy>-1)mg_fish.dy=-1
  else
   s.dx=0
  end
