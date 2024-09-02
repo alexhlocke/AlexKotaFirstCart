@@ -155,10 +155,40 @@ function draw_hboxs()
   fillp()
  end
  
+ for i in all(enemies) do
+  local hb=i.hbox
+  fillp(▒)
+  rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
+  fillp()
+ end
+ 
  local hb=mg_fish.hbox
  fillp(▒)
  rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
  fillp()
+end
+
+
+
+
+function col(a,b)
+ --check if hb
+ --if(a.hb==nil)debug[8]=a.id..":invalid hb"
+ --if(b.hb==nil)debug[8]=b.id..":invalid hb"
+ ahb=a.hbox
+ bhb=b.hbox
+
+ if(
+  ((ahb.x1>=bhb.x1 and ahb.x1<=bhb.x2)
+  or (ahb.x2>=bhb.x1 and ahb.x2<=bhb.x2))
+ and 
+  ((ahb.y1>=bhb.y1 and ahb.y1<=bhb.y2)
+  or (ahb.y2>=bhb.y1 and ahb.y2<=bhb.y2))
+  ) then 
+   return true
+ end
+
+ return false
 end
 -->8
 --== reeling ==-----------------
@@ -203,8 +233,11 @@ mg_fish={
  ,scale=2
  ,flp=false
  ,hbox={
-   
-  }
+	  x1=56
+		,x2=70
+		,y1=62
+		,y2=64
+ }
 }
 xreel_force=0.04
 yreel_force=0.02
@@ -246,6 +279,13 @@ function update_mg_fish()
  hb.x2=s.x+7
  hb.y1=s.y-1
  hb.y2=s.y+1
+ 
+ --collisions
+ for e in all(enemies) do
+		if(col(mg_fish,e))then
+		 debug[5]="collided"
+		end
+ end
 end
 
 --draw
@@ -268,6 +308,7 @@ function make_shark()
   ,sprt=140,w=4,h=2
   ,flp=true
   ,id="shark"
+  ,hbox={x1=-1,y1=-1,x2=-1,y2=-1}
  }
  
  if(rnd(2)<1)then
@@ -286,6 +327,13 @@ function update_enemies()
  for e in all(enemies) do
   e.x+=e.dx
   e.y+=e.dy
+  
+  --update hbox
+	 local hb = e.hbox
+	 hb.x1=e.x+6
+	 hb.x2=e.x+24
+	 hb.y1=e.y+9
+	 hb.y2=e.y+11
  end
 end
 
