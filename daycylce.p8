@@ -191,8 +191,6 @@ function draw_game()
  draw_clouds()
  
  draw_lights()
- --draw clock
- draw_clock(w.t,clock_x,clock_y,clock_size)
  
  --draw water
  draw_water(110) --water y
@@ -216,9 +214,12 @@ function draw_game()
   draw_minigame()
  end
  
- 
  --== draw foreground details
  draw_fx()
+ 
+ --draw clock
+ draw_clock(w.t,clock_x,clock_y,clock_size)
+
  
  --draw intreactable prompts
  for i in all(interactables) do
@@ -1102,7 +1103,7 @@ pincrement=1
 
 st=time()
 
-clock_x=505
+clock_x=121
 clock_y=6
 clock_size=4 --radius of clock
 clock_color=15 
@@ -1146,6 +1147,8 @@ end
 -- draw_clock(minute, hour, origin x, origin y, radius)
 function draw_clock(m,x,y,r)
 		spr(111,x-3,y-3)
+		x=cam.x+x
+		y=cam.y+y
   local mh_len=(r-1)*1.0 -- min hand 1 px smaller
   m_x,m_y=clock_hand_position(m,x,y,mh_len)
   circfill(x,y,r+1,clock_color)
