@@ -6,6 +6,9 @@ __lua__
 -------------------------------
 
 function _init()
+ --setup save data
+ cartdata("alex_kota_catfish_1") 
+
  --set color palette
  reset_pal()
  --shortcuts to make it easier
