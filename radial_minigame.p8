@@ -28,16 +28,11 @@ function _init()
  --debug
 	--add show debug menu item
 	menuitem(1,"debug on/off",function()show_debug = not show_debug end)
- 
- --init game
- --init_game()
- 
- init_reeling_mg()
 end
 
 
 function _update()
- update_reeling_mg()
+ update_reeling()
 end
 
 
@@ -45,7 +40,8 @@ function _draw()
  cls(2)
  map()
  
- draw_reeling_mg()
+ --draw minigame
+ draw_reeling()
  
  if(show_debug)then
 	 print_debug()
@@ -155,17 +151,17 @@ function draw_hboxs()
   fillp()
  end
  
- for i in all(enemies) do
-  local hb=i.hbox
-  fillp(▒)
-  rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
-  fillp()
- end
- 
- local hb=mg_fish.hbox
- fillp(▒)
- rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
- fillp()
+-- for i in all(enemies) do
+--  local hb=i.hbox
+--  fillp(▒)
+--  rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
+--  fillp()
+-- end
+-- 
+-- local hb=mg_fish.hbox
+-- fillp(▒)
+-- rect(hb.x1,hb.y1,hb.x2,hb.y2,8)
+-- fillp()
 end
 
 
@@ -191,220 +187,104 @@ function col(a,b)
  return false
 end
 -->8
---== reeling ==-----------------
+-- reeling 
+--============================--
 
---== mg player ==--
 
-mg_player={
- x=0,y=0
- ,speed=4
-}
-
---update
-function update_mg_player()
- local s=mg_player
- local spd=s.speed
- if(btn(⬅️))then
-  s.x-=spd
-  if(s.x<0)s.x=0
- end
- if(btn(➡️))then
-  s.x+=spd
-  if(s.x>127)s.x=127
- end
-end
-
---draw 
-function draw_mg_player()
- local x=mg_player.x
- local y=mg_player.y
- circfill(x,y,6,1)
- circ(x,y,6,3)
- if(show_hints_f>0)bprint_cent("⬅️     ➡️",x-3,y+2,15,0)
+function init_reeling()
+ 
 end
 
 
---== fish ==--
+function update_reeling()
+ update_wheel()
+ 
+ update_reelfish()
+end
 
-grav=1.33
-mg_fish={
- x=63,y=63
- ,dx=0,dy=0
- ,scale=2
- ,flp=false
- ,hbox={
-	  x1=56
-		,x2=70
-		,y1=62
-		,y2=64
- }
+
+function draw_reeling()
+ draw_wheel()
+ 
+ draw_reelfish()
+end
+
+
+--== wheel menu ==-----------------
+
+wheel={
+  angle=0
+ ,spin_rate=.015
+ ,retract_rate=.0015
+ ,radius=10
+ ,grow_rate=1
+ ,max_r=60
+ ,min_r=12
+ ,pt1={
+   angle=0
+  }
+ ,pt2={
+   angle=0.5
+  }
 }
-xreel_force=0.04
-yreel_force=0.02
 
---update
-function update_mg_fish()
- local s=mg_fish
- 
- --account for gravity
- s.dy=grav
- 
- --reel
+function update_wheel()
+ --rotate wheel
  if(btn(❎))then
-  -- calculate the difference between mg_player and mg_fish positions
-  local diff_x=mg_player.x-mg_fish.x
-  local diff_y=mg_player.y-mg_fish.y
-
-  -- adjust dx and dy to move mg_fish towards mg_player
-  mg_fish.dx=diff_x * xreel_force -- adjust the multiplier for speed
-  mg_fish.dy=diff_y * yreel_force
-  if(mg_fish.dy<0 and mg_fish.dy>-1)mg_fish.dy=-1
+  wheel.angle-=wheel.spin_rate
  else
-  s.dx=0
+  wheel.angle+=wheel.retract_rate
  end
  
- --flip sprite if needed
- if(s.dx>0)then
-  s.flp=true
- elseif(s.dx<0)then
-  s.flp=false
+ --change wheel radius
+ if(btn(⬅️)or btn(⬇️))then
+  wheel.radius-=wheel.grow_rate
+  if(wheel.radius<wheel.min_r)wheel.radius=wheel.min_r
  end
- 
- --move
- s.x+=s.dx
- s.y+=s.dy
- 
- --update hbox
- local hb = s.hbox
- hb.x1=s.x-7
- hb.x2=s.x+7
- hb.y1=s.y-1
- hb.y2=s.y+1
- 
- --collisions
- for e in all(enemies) do
-		if(col(mg_fish,e))then
-		 debug[5]="collided"
-		end
- end
-end
-
---draw
-function draw_mg_fish()
- local s=mg_fish
- 
- osspr(3,0,64,16,8,s.x-8,s.y-4,16,8,s.flp,false)
-end
-
-
---== enemies ==--
-
-enemies={}
-
-function make_shark()
- local enemy={
-  x=-30
-  ,y=cam.y+20+rnd(88)
-  ,dx=2,dy=0
-  ,sprt=140,w=4,h=2
-  ,flp=true
-  ,id="shark"
-  ,hbox={x1=-1,y1=-1,x2=-1,y2=-1}
- }
- 
- if(rnd(2)<1)then
-  enemy.x=158
-  enemy.dx*=-1
-  enemy.flp=false
- end
- 
- add(enemies,enemy)
-end
-
-
---updates/draws
-
-function update_enemies()
- for e in all(enemies) do
-  e.x+=e.dx
-  e.y+=e.dy
-  
-  --update hbox
-	 local hb = e.hbox
-	 hb.x1=e.x+6
-	 hb.x2=e.x+24
-	 hb.y1=e.y+9
-	 hb.y2=e.y+11
+ if(btn(➡️)or btn(⬆️))then
+  wheel.radius+=wheel.grow_rate
+  if(wheel.radius>wheel.max_r)wheel.radius=wheel.max_r
  end
 end
 
 
-function draw_enemies()
- for e in all(enemies) do
-  ospr(8,e.sprt,e.x,e.y,e.w,e.h,e.flp)
-  if(e.id=="shark")then
-   local c=1
-   pal({[0]=c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c}, 0)
-   spr(e.sprt,e.x,e.y,e.w,e.h,e.flp)
-   rp()
-  end
- end
+function draw_wheel()
+ xp=cam.x+63
+ yp=cam.y+63
+ 
+ --draw outer/inner limit circs
+ circ(xp,yp,wheel.min_r,14)
+ circ(xp,yp,wheel.max_r,14)
+ 
+ --draw actual wheel
+ circ(xp,yp,wheel.radius,15)
+ 
+ --draw points
+ circfill(xp+wheel.radius*cos(wheel.angle+wheel.pt1.angle)
+  ,yp+wheel.radius*sin(wheel.angle+wheel.pt1.angle),4,6)
+ circfill(xp+wheel.radius*cos(wheel.angle+wheel.pt2.angle)
+  ,yp+wheel.radius*sin(wheel.angle+wheel.pt2.angle),4,6)
 end
 
---== main minigame upd ==--------
 
-reel_meter_max=40
-reel_meter=40
-reel_rate=0.1
+--== reeling fish ==------------
 
-function init_reeling_mg()
- reel_meter=reel_meter_max
- mg_player.x=63 
- mg_player.y=cam.y
- 
- show_hints_f=90
+
+reelfish={
+ x=63
+ ,y=63
+ ,rad=45
+}
+
+
+function update_reelfish()
+ reelfish.x=cam.x+63+reelfish.rad*cos(t()/8)
+ reelfish.y=cam.y+63+reelfish.rad*sin(t()/16)
 end
 
-function update_reeling_mg()
- --debug
- if(btnp(🅾️))then
-  make_shark()
- end
 
- --update hint frame
- if(show_hints_f>0)show_hints_f-=1
-
- --update reel meter
- reel_meter-=reel_rate
- if(btn(❎))reel_meter-=reel_rate
- 
- --if reel meter <= 0 end
- if(reel_meter<=0) then
-  --end minigame
-  reel_meter=0
- end
-
- update_mg_player()
- update_mg_fish()
- update_enemies()
-end
-
-function draw_reeling_mg()
- line(mg_player.x,mg_player.y,mg_fish.x,mg_fish.y,15)
- 
- draw_mg_player()
- draw_mg_fish()
- draw_enemies()
- 
- draw_reel_meter()
- 
- if(show_hints_f>0)bprint_cent("❎ TO REEL",62,cam.y+120,15,0)
-end
-
-function draw_reel_meter()
- local bottom_y=cam.y+123
- rect(5,bottom_y-reel_meter_max,9,bottom_y,5)
- rectfill(6,bottom_y-reel_meter,8,bottom_y,6)
+function draw_reelfish()
+ ospr(3,128,reelfish.x,reelfish.y,2,1,false,false)
 end
 -->8
 --spawners
