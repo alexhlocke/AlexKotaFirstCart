@@ -39,9 +39,9 @@ end
 
 
 function _update()
- if(do_reeling_mg)then
-	 update_reeling()
- end
+	update_reeling()
+ 
+ shake()
 end
 
 
@@ -213,48 +213,60 @@ function init_reeling()
  do_reeling_mg=true
  draw_reeling_mg=true
  reel_fish_caught=false
+ reeling_mg_complete=false
+ 
+ end_countdown=30
 end
 
 
 fish_sound=false
 function update_reeling()
- update_wheel()
- 
- update_reelfish()
- 
- update_reel_meter()
- 
-  --!! this is temporary and
- --should be replaced with
- --proper hitboxes 
- 
- if(get_distance(reelfish,wpt1)<10
-  or get_distance(reelfish,wpt2)<10)then
+ if(not do_reeling_mg)then
+  end_countdown-=1
   
-  --print ! above fish
-  show_wow=true
-  
-  --update meter
-  reel_meter+=reel_bonus
-  
-  --manage audio
-  if(not fish_sound)then
-   sfx(45,3)
-   fish_sound=true
-  end
-  
-  if(reel_meter>reel_meter_max)then
-   debug[10]="fish caught!"
-   reel_meter=reel_meter_max
-   reel_success()
+  if(end_countdown==0)then
+   reel_success2()
   end
  else
-  sfx(-1,3)
-  fish_sound=false
-  show_wow=false
- end
  
- debug[1]=get_distance(reelfish,{x=63,y=63})
+	 update_wheel()
+	 
+	 update_reelfish()
+	 
+	 update_reel_meter()
+	 
+	  --!! this is temporary and
+	 --should be replaced with
+	 --proper hitboxes 
+	 
+	 if(get_distance(reelfish,wpt1)<10
+	  or get_distance(reelfish,wpt2)<10)then
+	  
+	  --print ! above fish
+	  show_wow=true
+	  
+	  --update meter
+	  reel_meter+=reel_bonus
+	  
+	  --manage audio
+	  if(not fish_sound)then
+	   sfx(45,3)
+	   fish_sound=true
+	  end
+	  
+	  if(reel_meter>reel_meter_max)then
+	   debug[10]="fish caught!"
+	   reel_meter=reel_meter_max
+	   reel_success()
+	  end
+	 else
+	  sfx(-1,3)
+	  fish_sound=false
+	  show_wow=false
+	 end
+	 
+	 debug[1]=get_distance(reelfish,{x=63,y=63})
+ end
 end
 
 
@@ -403,22 +415,56 @@ end
 --== other helpers ==------------
 
 
+--win function--
 function reel_success()
  do_reeling_mg=false
  sfx(-1,2)
  sfx(-1,3)
- music(32)
+ 
+ music(-1)
+ 
+ shake_i=10
  
  uh_um_fish=rnd(fishes)
- 
+end
+
+function reel_success2()
+ music(32)
+
  reel_fish_caught=true
 end
 
 
+--get distance between 2 tables
 function get_distance(point1,point2)
  local dx=point2.x-point1.x
  local dy=point2.y-point1.y
  return sqrt(dx*dx+dy*dy)
+end
+
+
+--wait function
+function wait(frames) 
+ for i = 1,frames do 
+  flip() 
+ end 
+end
+
+
+--screenshake--
+shake_i=0
+function shake()
+ local shake_x=rnd(shake_i)-(shake_i/2)
+ local shake_y=rnd(shake_i)-(shake_i/2)
+
+ --offset the camera
+ camera(cam.x+shake_x,cam.y+shake_y)
+
+ --ease shake and return to normal
+ shake_i*=.4
+ if shake_i<.3 then 
+  shake_i=0 
+ end
 end
 -->8
 --spawners
