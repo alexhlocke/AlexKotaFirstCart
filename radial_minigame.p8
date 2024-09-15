@@ -23,7 +23,7 @@ function _init()
  init_reeling()
 
  --create fish arcetypes
- --init_fish()
+ init_fish()
  
  --set up interactalbes
  --init_interactables()
@@ -57,6 +57,12 @@ function _draw()
  if(show_debug)then
 	 print_debug()
 	 draw_hboxs()
+ end
+ 
+ if(t()<8)then
+		bprint("rEELING mINIGAME pROTOTYPE V2.1",1,1,15,1)
+		bprint("cTRL+r TO rESET",1,8,14,1)
+		bprint("cONTROL WITH o/x + ⬆️⬇️⬅️➡️",19,121,15,0)
  end
 end
 
@@ -145,7 +151,8 @@ end
 --debug
 debug={}
 
-show_debug=true
+show_debug=false
+
 function print_debug()
  for i=1,20 do
   if(debug[i]!=nil) then
@@ -205,6 +212,7 @@ end
 function init_reeling()
  do_reeling_mg=true
  draw_reeling_mg=true
+ reel_fish_caught=false
 end
 
 
@@ -256,6 +264,10 @@ function draw_reeling()
  draw_reelfish()
  
  draw_reel_meter()
+ 
+ if(reel_fish_caught)then
+  draw_fish_got(uh_um_fish)
+ end
 end
 
 
@@ -391,9 +403,13 @@ end
 
 function reel_success()
  do_reeling_mg=false
+ sfx(-1,2)
  sfx(-1,3)
- sfx(-1,4)
  music(32)
+ 
+ uh_um_fish=rnd(fishes)
+ 
+ reel_fish_caught=true
 end
 
 
@@ -479,6 +495,201 @@ function add_fx(x,y,life,col,upd,draw)
  add(fxs,fx)
  return fx
 end
+-->8
+--fish
+
+--[[ fish structure
+ name, scale, sprt (sprite #)
+ , w, h (sprite width/height)
+ ,shinycols
+]]--
+
+fishes={
+} --arcetype table
+
+--add fish to fishes table
+function make_fish(name,sprt,w,h,scale,shinycols)
+ add(fishes,
+  {name=name
+  ,sprt=sprt
+  ,w=w,h=h
+  ,scale=scale
+  ,shinycols=shinycols}
+ )
+end
+
+--fully populates fishes table
+--◆this can be optimized for
+--tokens if need be
+function init_fish()
+ --default scale = 2
+ --1x1 fish
+ make_fish("moss slug"
+  ,135,1,1,2,{{6,3},{5,2},{4,1}})
+ make_fish("stromateidae"
+  ,136,1,1,2)
+ make_fish("darwin fish"
+  ,137,1,1,2)
+ make_fish("omega fish"
+  ,138,1,1,2)
+ make_fish("greenback"
+  ,139,1,1,2)
+ make_fish("shad"
+  ,152,1,1,2)
+ make_fish("pinktail"
+  ,153,1,1,2,{{8,2},{9,3},{2,8},{3,9}})
+ make_fish("shrimp"
+  ,154,1,1,1,{{12,3},{11,2},{10,4}})
+ make_fish("jumbo shrimp"
+  ,154,1,1,3,{{12,3},{11,2},{10,4}})
+ make_fish("pennon"
+  ,155,1,1,2)
+ make_fish("pufferfish"
+  ,151,1,1,2)
+ make_fish("seapony"
+  ,134,1,1,2)
+  
+ --1x2 fish
+ make_fish("axolittle"
+  ,168,2,1,2)
+ make_fish("trout"
+  ,184,2,1,2)
+  
+ --2x2 fish
+ make_fish("solfish"
+  ,170,2,2,2)
+ make_fish("spade"
+  ,172,2,2,2)
+ make_fish("amgler"
+  ,174,2,2,2,{{6,15},{5,15},{4,15},{1,14},{7,13},{11,0},{12,15}})
+ 
+ --xl fish
+ make_fish("swordfish"
+  ,140,4,2,3,{{3,9},{2,8},{1,7}})
+ make_fish("hammerhead"
+  ,164,4,2,3,{})
+ make_fish("giant squid"
+  ,160,4,2,3,{})
+ 
+ 
+-- make_fish("rainbow trout"
+--  ,184,2,1,2)
+-- make_fish("betta"
+--  ,22,2,1,1)
+-- make_fish("bluegill"
+--  ,8,1,1,1)  
+-- make_fish("goldfish"
+--  ,9,1,1,1)
+-- make_fish("shad"
+--  ,10,1,1,1)
+-- make_fish("neon tetra"
+--  ,24,1,1,1)
+-- make_fish("shrimp"
+--  ,25,1,1,1)
+-- make_fish("minnow"
+--  ,26,1,1,1)
+-- make_fish("swordfish"
+--  ,11,4,2,1)
+end
+
+function find_fish(search_term)
+ for f in all(fishes) do
+  if(f.sprt==search_term
+  or f.name==search_term)then
+   return f
+  end
+ end
+end
+
+
+--== fish display ==------------
+
+
+function draw_fish_got(fish)
+ --debugging shiny
+-- fish=find_fish(160)
+-- fish.shiny=true
+ 
+ --get fish h and w
+ local h=fish.h*8
+ local w=fish.w*8
+ local scale=fish.scale
+ 
+ --upd scale
+ --scale=fish.scale+0.5*sin(t()/4)
+ 
+ --set inverse draw mode + fillp
+ poke(0x5f34,0x2)
+ --draw border circle
+ fillp(▒)
+ local circ_rad=65
+ circfill(cam.x+64,cam.y+64,circ_rad,1 | 0x1800)
+ fillp(█)
+ 
+ --draw fish/lines
+ local y=40
+ y+=5*sin(t()/2)
+ draw_flourish_lines(cam.x+63,cam.y+y+14)
+ 
+ --draw fish
+	osspr(0, fish.sprt%16*8,flr(fish.sprt/16)*8
+  ,w,h
+  ,cam.x+63-w*scale/2,cam.y+y-h*scale/2
+  ,w*scale,h*scale)
+
+ --shiny
+ if(fish.shiny)set_shiny_pal(fish)
+	
+ sspr(fish.sprt%16*8,flr(fish.sprt/16)*8
+  ,w,h
+  ,cam.x+63-w*scale/2,cam.y+y-h*scale/2
+  ,w*scale,h*scale)
+ 
+ --complete palette refresh
+ rp() 
+  
+ --print fish info
+ bprint_cent("fish caught:",cam.x+63,cam.y+90,15,0)
+ if(fish.shiny)then
+  bprint_cent("shiny",cam.x+63,cam.y+98,10,0)  
+  bprint_cent(fish.name,cam.x+63,cam.y+105,3,0)  
+ else
+  bprint_cent(fish.name,cam.x+63,cam.y+98,3,0)
+ end
+end
+
+
+--item get lines
+function draw_flourish_lines(x,y)
+	for i=0,16 do
+		local s=sin(time() * 2.1 + i/16)
+		local c=cos(time() * 2.1 + i/16)
+		local ty=y-14
+		local r=20
+		line(x+s*r,ty+c*r,x+s*40,ty+c*40,15)
+	end
+end
+
+
+--shiny pal
+function set_shiny_pal(fish)
+ if(fish.shinycols==nil)return
+ scols=fish.shinycols
+ for i=1,#scols do
+  pal(scols[i][1],scols[i][2])
+ end
+end
+
+function reset_shiny_pal(fish)
+	if(fish.shinycols==nil)return
+ scols=fish.shinycols
+ for i=1,#scols do
+  pal(scols[i][2],scols[i][1])
+ end
+end
+
+
+
 __gfx__
 0077000000770000000077000000770000000770000000000000777777770000eeeeeeee000000000eeeeeeeeeeeeee0066065000050500089230000bbbbbbbb
 07cb700007bc70000007cc700007cc7000007cc7000000000007888888887000ecb5bc5d09f0f9000e333333333333d0005550000005000089235660b452377b
