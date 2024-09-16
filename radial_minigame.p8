@@ -371,8 +371,8 @@ reelfish={
 
 
 function update_reelfish()
- reelfish.x=cam.x+63+reelfish.rad*cos(t()/7)
- reelfish.y=cam.y+63+reelfish.rad*sin(t()/16)
+ reelfish.x=cam.x+63+reelfish.rad*cos(t()/5)
+ reelfish.y=cam.y+63+reelfish.rad*sin(t()/13)
 end
 
 
@@ -423,7 +423,7 @@ function reel_success()
  
  music(-1)
  
- shake_i=10
+ shake_i=15
  
  uh_um_fish=rnd(fishes)
 end
@@ -461,7 +461,7 @@ function shake()
  camera(cam.x+shake_x,cam.y+shake_y)
 
  --ease shake and return to normal
- shake_i*=.4
+ shake_i*=.7
  if shake_i<.3 then 
   shake_i=0 
  end
