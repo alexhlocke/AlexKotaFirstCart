@@ -1128,15 +1128,23 @@ function show_prompt(i) --i=interactabble
   xp+=10
  end
  
- if(i.id=="shop keep")then
- 	show_❎(xp-1,yp-8)
- end
+-- if(i.id=="shop keep")then
+-- 	show_❎(xp-2,yp-8)
+-- else
+--	 --show little ❎ button
+--	 show_❎(xp-2,yp+9)
+-- end
+ 
+ show_❎(xp-2,yp+9)
 
+ bprint_cent(i.prompt,xp,yp,15,0)
 end
 
-function show_❎(x,y)
- bprint_cent("❎",x,y,7,7)
- bprint_cent("❎",x,y-sin(t()),7,3)
+function show_❎(x,y,c,bc)
+ c=c or 15
+ bc=bc or 0
+ bprint_cent("❎",x,y,c,bc)
+ bprint_cent("❎",x,y-sin(t()),c,bc)
 end
 
 
@@ -1208,7 +1216,7 @@ function init_interactables()
   ,"fishing zone")
   
  --npcs shop keep
-  add_interactable(175,203,191,224
+  add_interactable(175,193,194,224
   ,"ahoy"
   ,function()
   		tb_init(6,{"ahoy sailor, how might i be \nable to help?","a fishing rod? which one would \nyou like?"}) -- when calling for a new text box, you must pass two arguments to it: voice (the sfx played) and a table containing the strings to be printed. this table can have any number of strings separated with a comma.
