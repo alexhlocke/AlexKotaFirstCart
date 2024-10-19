@@ -1361,7 +1361,7 @@ function tb_init(voice,string) -- this function starts and defines a text box.
 	x=0, -- x coordinate
 	y=106, -- y coordginate
 	w=127, -- text box width
-	h=21, -- text box height
+	h=22, -- text box height
 	col1=1, -- background color
 	col2=12, -- border color
 	col3=12, -- text color
@@ -1392,7 +1392,7 @@ function tb_draw() -- this function draws the text box.
 
 	if reading then -- only draw the text box if reading is true, that is, if a text box has been called and tb_init() has already happened.
 		rectfill(cam.x,cam.y+128,cam.x+tb.w,cam.y+128-tb.h,tb.col1) -- draw the background.
-		rect(    cam.x,cam.y+128,cam.x+tb.w,cam.y+128-tb.h,tb.col3) -- draw the border.
+		rect(    cam.x,cam.y+127,cam.x+tb.w,cam.y+128-tb.h,tb.col3) -- draw the border.
 		print(sub(tb.str[tb.i],1,tb.char),cam.x+2,cam.y+130-tb.h,tb.col3) -- draw the text.
 	end
 end
